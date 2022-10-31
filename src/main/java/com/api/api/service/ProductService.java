@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -32,13 +33,55 @@ public class ProductService {
     }
 
     public List<Product> getAllProducts(Integer pageNumber,Integer pageSize){
-        Pageable p= PageRequest.of(pageNumber,pageSize);
-        Page<Product> pageProduct=this.productRepo.findAll(p);
-        List<Product> allProduct= pageProduct.getContent();
-        return allProduct;
+        try {
+            Pageable p = PageRequest.of(pageNumber, pageSize);
+            Page<Product> pageProduct = this.productRepo.findAll(p);
+            List<Product> allProduct = pageProduct.getContent();
+            return allProduct;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public List<Product> getAllProductWithSupplierName(String supplier_name, String product_name) {
+    public String update(Integer product_id,String product_name) {
+        try {
+            Optional<Product> product = this.productRepo.findById(product_id);
+            if (product.isEmpty()) {
+                return "product not found by this id";
+            }
+            List<Product> list = productRepo.findAll();
+            for (Product p : list) {
+                if (p.getProductId().equals(product_id)) {
+                    p.setDisplayName(product_name);
+                    list.add(p);
+                    break;
+                }
+            }
+            return "product name updated";
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return "null";
+    }
+
+    public String delete(Integer product_id) {
+        try {
+            List<Product> list = productRepo.findAll();
+            for (Product p : list) {
+                if (p.getProductId().equals(product_id)) {
+                    list.remove(p);
+                    return "product deleted";
+                }
+            }
+            return "product not found";
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /*public List<Product> getAllProductWithSupplierName(String supplier_name, String product_name) {
         List<Product> list=new ArrayList<>();
 
         list=productRepo.findAll();
@@ -55,9 +98,9 @@ public class ProductService {
             }
         }
         return list;
-    }
+    }*/
 
-    public List<Product> getAllProductsNotExpired() {
+    /*public List<Product> getAllProductsNotExpired() {
         List<Product> list=new ArrayList<>();
         list=productRepo.findAll();
         LocalDate d=LocalDate.now();
@@ -67,5 +110,5 @@ public class ProductService {
             }
         }
         return list;
-    }
+    }*/
 }

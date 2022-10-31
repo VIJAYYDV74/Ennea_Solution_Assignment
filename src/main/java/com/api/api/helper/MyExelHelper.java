@@ -51,38 +51,40 @@ public class MyExelHelper {
 
                         switch (cid) {
                             case 0:
-                                p.setProductCode(cell.getStringCellValue());
+                                p.setProductId((int) cell.getNumericCellValue());
                                 break;
                             case 1:
-                                p.setProductName(cell.getStringCellValue());
+                                p.setCategory(cell.getStringCellValue());
                                 break;
                             case 2:
-                                p.setBatch(cell.getStringCellValue());
+                                p.setSubCategory(cell.getStringCellValue());
                                 break;
                             case 3:
-                                p.setStock((int) cell.getNumericCellValue());
+                                p.setDisplayName(cell.getStringCellValue());
                                 break;
                             case 4:
-                                p.setDeal((int) cell.getNumericCellValue());
+                                p.setDescription(cell.getStringCellValue());
                                 break;
                             case 5:
-                                p.setFree((int) cell.getNumericCellValue());
+                                p.setListPrice((float) cell.getNumericCellValue());
                                 break;
                             case 6:
-                                p.setMrp(cell.getNumericCellValue());
+                                p.setSalePrice((float) cell.getNumericCellValue());
                                 break;
                             case 7:
-                                p.setRate(cell.getNumericCellValue());
+                                p.setUom(cell.getStringCellValue());
                                 break;
                             case 8:
-                                p.setExpiry(convertToLocalDate(cell.getStringCellValue()));
+                                p.setSku(cell.getStringCellValue());
                                 break;
                             case 9:
-                                p.setCompany(cell.getStringCellValue());
+                                p.setHsn(cell.getStringCellValue());
                                 break;
                             case 10:
-                                p.setSupplier(cell.getStringCellValue());
+                                p.setTaxGroup(cell.getStringCellValue());
                                 break;
+                            case 11:
+                                p.setImageUrl(cell.getStringCellValue());
                             default:
                                 break;
                         }

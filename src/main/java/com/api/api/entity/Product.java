@@ -8,37 +8,36 @@ import java.util.Date;
 public class Product {
 
     @Id
-    @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer productId;
-    private String productCode;
-    private String productName;
-    private String batch;
-    private Integer stock;
-    private Integer deal;
-    private Integer free;
-    private Double mrp;
-    private Double rate;
-    private LocalDate expiry;
-    private String company;
-    private String supplier;
 
-    public Product(Integer productId, String productCode, String productName, String batch, Integer stock, Integer deal, Integer free, Double mrp, Double rate, LocalDate expiry, String company, String supplier) {
-        this.productId = productId;
-        this.productCode = productCode;
-        this.productName = productName;
-        this.batch = batch;
-        this.stock = stock;
-        this.deal = deal;
-        this.free = free;
-        this.mrp = mrp;
-        this.rate = rate;
-        this.expiry = expiry;
-        this.company = company;
-        this.supplier = supplier;
-    }
+    private String category;
+    private String subCategory;
+    private String displayName;
+    private String description;
+    private float listPrice;
+    private float salePrice;
+    private String uom;
+    private String sku;
+    private String hsn;
+    private String taxGroup;
+    private String imageUrl;
 
     public Product() {
+    }
+
+    public Product(Integer productId, String category, String subCategory, String displayName, String description, float listPrice, float salePrice, String uom, String sku, String hsn, String taxGroup, String imageUrl) {
+        this.productId = productId;
+        this.category = category;
+        this.subCategory = subCategory;
+        this.displayName = displayName;
+        this.description = description;
+        this.listPrice = listPrice;
+        this.salePrice = salePrice;
+        this.uom = uom;
+        this.sku = sku;
+        this.hsn = hsn;
+        this.taxGroup = taxGroup;
+        this.imageUrl = imageUrl;
     }
 
     public Integer getProductId() {
@@ -49,91 +48,91 @@ public class Product {
         this.productId = productId;
     }
 
-    public String getProductCode() {
-        return productCode;
+    public String getCategory() {
+        return category;
     }
 
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getSubCategory() {
+        return subCategory;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setSubCategory(String subCategory) {
+        this.subCategory = subCategory;
     }
 
-    public String getBatch() {
-        return batch;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setBatch(String batch) {
-        this.batch = batch;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
-    public Integer getStock() {
-        return stock;
+    public String getDescription() {
+        return description;
     }
 
-    public void setStock(Integer stock) {
-        this.stock = stock;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Integer getDeal() {
-        return deal;
+    public float getListPrice() {
+        return listPrice;
     }
 
-    public void setDeal(Integer deal) {
-        this.deal = deal;
+    public void setListPrice(float listPrice) {
+        this.listPrice = listPrice;
     }
 
-    public Integer getFree() {
-        return free;
+    public float getSalePrice() {
+        return salePrice;
     }
 
-    public void setFree(Integer free) {
-        this.free = free;
+    public void setSalePrice(float salePrice) {
+        this.salePrice = salePrice;
     }
 
-    public Double getMrp() {
-        return mrp;
+    public String getUom() {
+        return uom;
     }
 
-    public void setMrp(Double mrp) {
-        this.mrp = mrp;
+    public void setUom(String uom) {
+        this.uom = uom;
     }
 
-    public Double getRate() {
-        return rate;
+    public String getSku() {
+        return sku;
     }
 
-    public void setRate(Double rate) {
-        this.rate = rate;
+    public void setSku(String sku) {
+        this.sku = sku;
     }
 
-    public LocalDate getExpiry() {
-        return expiry;
+    public String getHsn() {
+        return hsn;
     }
 
-    public void setExpiry(LocalDate expiry) {
-        this.expiry = expiry;
+    public void setHsn(String hsn) {
+        this.hsn = hsn;
     }
 
-    public String getCompany() {
-        return company;
+    public String getTaxGroup() {
+        return taxGroup;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
+    public void setTaxGroup(String taxGroup) {
+        this.taxGroup = taxGroup;
     }
 
-    public String getSupplier() {
-        return supplier;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setSupplier(String supplier) {
-        this.supplier = supplier;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

@@ -35,13 +35,28 @@ public class ProductController {
          return this.productService.getAllProducts(pageNumber,pageSize);
      }
 
-     @GetMapping(value = "/product/supplier/{supplier_name}",params = "product_name")
-    public List<Product> getAllProductWithSupplierName(@PathVariable String supplier_name,@RequestParam String product_name) throws ParseException {
-         return productService.getAllProductWithSupplierName(supplier_name,product_name);
+
+     @PutMapping(value = "/product/{product_id}",params = "product_name")
+    public String update(@PathVariable Integer product_id,@RequestParam String product_name){
+         return productService.update(product_id,product_name);
      }
 
+     @DeleteMapping(value = "/product/{product_id}")
+    public String delete(@PathVariable Integer product_id){
+         return productService.delete(product_id);
+     }
+
+
+
+
+
+  /*   @GetMapping(value = "/product/supplier/{supplier_name}",params = "product_name")
+    public List<Product> getAllProductWithSupplierName(@PathVariable String supplier_name,@RequestParam String product_name) throws ParseException {
+         return productService.getAllProductWithSupplierName(supplier_name,product_name);
+     }*/
+/*
      @GetMapping("product/notExpired")
     public List<Product> getAllProductsNotExpired(){
          return productService.getAllProductsNotExpired();
-     }
+     }*/
 }

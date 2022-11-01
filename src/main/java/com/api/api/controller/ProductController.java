@@ -6,9 +6,12 @@ import com.api.api.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
+import java.io.Reader;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
@@ -20,18 +23,24 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-     @PostMapping("/product/upload")
-     public ResponseEntity<?> upload(@RequestParam("file")MultipartFile file){
-         if(MyExelHelper.checkExcelFormat(file)){
-                this.productService.save(file);
-                return ResponseEntity.ok(Map.of("message","file is uploaded"));
-         }
-         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please Upload excel file");
-     }
+    @PostMapping("/upload-csv-file")
+    public String uploadCSVFile(@RequestParam("file") MultipartFile file, Model model) {
+
+        if (file.isEmpty()) {
+            model.addAttribute("message", "Please select a CSV file to upload.");
+            model.addAttribute("status", false);
+        } else {
+
+            return this.productService.save(file,model);
+        }
+
+        return "file-upload-status";
+    }
+
 
      @GetMapping("/product")
     public List<Product> getAllProduct(@RequestParam(value = "pageNumber",defaultValue ="10",required = false) Integer pageNumber
-                                        ,@RequestParam(value = "pageSize",defaultValue = "1",required = false) Integer pageSize){
+                                        ,@RequestParam(value = "pageSize",defaultValue = "2",required = false) Integer pageSize){
          return this.productService.getAllProducts(pageNumber,pageSize);
      }
 

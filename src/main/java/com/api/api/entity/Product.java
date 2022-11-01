@@ -1,5 +1,7 @@
 package com.api.api.entity;
 
+import com.opencsv.bean.CsvBindByName;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
@@ -8,18 +10,32 @@ import java.util.Date;
 public class Product {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer pID;
+    @CsvBindByName
     private Integer productId;
 
+    @CsvBindByName
     private String category;
+    @CsvBindByName
     private String subCategory;
+    @CsvBindByName
     private String displayName;
+    @CsvBindByName
     private String description;
+    @CsvBindByName
     private float listPrice;
+    @CsvBindByName
     private float salePrice;
+    @CsvBindByName
     private String uom;
+    @CsvBindByName
     private String sku;
+    @CsvBindByName
     private String hsn;
+    @CsvBindByName
     private String taxGroup;
+    @CsvBindByName
     private String imageUrl;
 
     public Product() {

@@ -20,7 +20,7 @@ public class MyExelHelper {
 
     public static boolean checkExcelFormat(MultipartFile multipartFile){
         String contentType=multipartFile.getContentType();
-        if(contentType.equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")){
+        if(contentType.equals("text/csv")){
             return true;
         }
         return false;

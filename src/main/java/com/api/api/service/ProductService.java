@@ -3,17 +3,19 @@ package com.api.api.service;
 import com.api.api.entity.Product;
 import com.api.api.helper.MyExelHelper;
 import com.api.api.repositories.ProductRepo;
-import org.hibernate.id.uuid.Helper;
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,14 +24,27 @@ public class ProductService {
     @Autowired
     private ProductRepo productRepo;
 
-    public void save(MultipartFile file){
-        try {
-            List<Product> products=MyExelHelper.convertExcelToListOfProduct(file.getInputStream());
+    public String save(MultipartFile file, Model model){
+        try (Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
+
+            // create csv bean reader
+            CsvToBean<Product> csvToBean = new CsvToBeanBuilder(reader)
+                    .withType(Product.class)
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .build();
+
+            // convert `CsvToBean` object to list of users
+            List<Product> products = csvToBean.parse();
+
             this.productRepo.saveAll(products);
-        }catch (Exception e)
-        {
-            e.printStackTrace();
+            model.addAttribute("users", products);
+            model.addAttribute("status", true);
+
+        } catch (Exception ex) {
+            model.addAttribute("message", "An error occurred while processing the CSV file.");
+            model.addAttribute("status", false);
         }
+        return "null";
     }
 
     public List<Product> getAllProducts(Integer pageNumber,Integer pageSize){
@@ -70,7 +85,7 @@ public class ProductService {
             List<Product> list = productRepo.findAll();
             for (Product p : list) {
                 if (p.getProductId().equals(product_id)) {
-                    list.remove(p);
+                    productRepo.deleteById(product_id);
                     return "product deleted";
                 }
             }

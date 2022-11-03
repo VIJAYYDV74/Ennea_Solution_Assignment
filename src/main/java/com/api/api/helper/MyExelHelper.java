@@ -1,5 +1,6 @@
 package com.api.api.helper;
 
+import com.api.api.MyExelHelper.MyExcleHelperInterface;
 import com.api.api.entity.Product;
 import com.api.api.service.ProductService;
 import org.apache.poi.ss.usermodel.Cell;
@@ -15,10 +16,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class MyExelHelper {
+public class MyExelHelper implements MyExcleHelperInterface {
 
 
-    public static boolean checkExcelFormat(MultipartFile multipartFile){
+    @Override
+    public  boolean checkExcelFormat(MultipartFile multipartFile){
         String contentType=multipartFile.getContentType();
         if(contentType.equals("text/csv")){
             return true;
@@ -27,7 +29,8 @@ public class MyExelHelper {
 
     }
 
-    public static List<Product> convertExcelToListOfProduct(InputStream is){
+    @Override
+    public  List<Product> convertExcelToListOfProduct(InputStream is){
         List<Product> list=new ArrayList<>();
         try {
 
@@ -105,7 +108,8 @@ public class MyExelHelper {
         return list;
     }
 
-    private static LocalDate convertToLocalDate(String date) {
+    @Override
+    public   LocalDate convertToLocalDate(String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return LocalDate.parse(date, formatter);
     }

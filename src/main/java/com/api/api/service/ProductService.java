@@ -1,7 +1,7 @@
 package com.api.api.service;
 
+import com.api.api.ServiceInterface.ProductServiceInterface;
 import com.api.api.entity.Product;
-import com.api.api.helper.MyExelHelper;
 import com.api.api.repositories.ProductRepo;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,12 +22,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductService {
+public class ProductService implements ProductServiceInterface {
     @Autowired
     private ProductRepo productRepo;
 
-    public String save(MultipartFile file, Model model){
+    @Override
+    public void save(MultipartFile file) throws Exception {
         try (Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
+
 
             // create csv bean reader
             CsvToBean<Product> csvToBean = new CsvToBeanBuilder(reader)
@@ -37,16 +41,15 @@ public class ProductService {
             List<Product> products = csvToBean.parse();
 
             this.productRepo.saveAll(products);
-            model.addAttribute("users", products);
-            model.addAttribute("status", true);
+
 
         } catch (Exception ex) {
-            model.addAttribute("message", "An error occurred while processing the CSV file.");
-            model.addAttribute("status", false);
+           ex.printStackTrace();
         }
-        return "null";
+
     }
 
+    @Override
     public List<Product> getAllProducts(Integer pageNumber,Integer pageSize){
         try {
             Pageable p = PageRequest.of(pageNumber, pageSize);
@@ -59,11 +62,12 @@ public class ProductService {
         return null;
     }
 
-    public String update(Integer product_id,String product_name) {
+    @Override
+    public ResponseEntity<String> update(Integer product_id, String product_name) {
         try {
             Optional<Product> product = this.productRepo.findById(product_id);
             if (product.isEmpty()) {
-                return "product not found by this id";
+                return new ResponseEntity<>("product not found by this id", HttpStatus.BAD_REQUEST);
             }
             List<Product> list = productRepo.findAll();
             for (Product p : list) {
@@ -73,27 +77,28 @@ public class ProductService {
                     break;
                 }
             }
-            return "product name updated";
+
         }catch (Exception e){
             e.printStackTrace();
         }
-        return "null";
+        return new ResponseEntity<>("product name updated",HttpStatus.OK);
     }
 
-    public String delete(Integer product_id) {
+    @Override
+    public ResponseEntity<String> delete(Integer product_id) throws Exception {
         try {
             List<Product> list = productRepo.findAll();
             for (Product p : list) {
                 if (p.getProductId().equals(product_id)) {
                     productRepo.deleteById(product_id);
-                    return "product deleted";
+                    return new ResponseEntity<>("product deleted",HttpStatus.OK);
                 }
             }
-            return "product not found";
+
         }catch (Exception e){
             e.printStackTrace();
         }
-        return null;
+        return new ResponseEntity<>("product not found",HttpStatus.BAD_REQUEST);
     }
 
     /*public List<Product> getAllProductWithSupplierName(String supplier_name, String product_name) {

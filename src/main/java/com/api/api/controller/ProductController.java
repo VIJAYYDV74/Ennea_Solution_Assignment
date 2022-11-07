@@ -31,7 +31,8 @@ public class ProductController {
                 this.productService.save(file);
                 return new ResponseEntity<>("file saved",HttpStatus.OK);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                //throw new RuntimeException(e);
+                return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
             }
         }
 
@@ -40,9 +41,9 @@ public class ProductController {
 
 
      @GetMapping("/product")
-    public List<Product> getAllProduct(@RequestParam(value = "pageNumber",defaultValue ="10",required = false) Integer pageNumber
+    public ResponseEntity<List<Product>> getAllProduct(@RequestParam(value = "pageNumber",defaultValue ="10",required = false) Integer pageNumber
                                         ,@RequestParam(value = "pageSize",defaultValue = "2",required = false) Integer pageSize){
-         return this.productService.getAllProducts(pageNumber,pageSize);
+         return new ResponseEntity<>(this.productService.getAllProducts(pageNumber,pageSize),HttpStatus.OK);
      }
 
 
@@ -57,7 +58,8 @@ public class ProductController {
          try {
              return productService.delete(product_id);
          } catch (Exception e) {
-             throw new RuntimeException(e);
+             //throw new RuntimeException(e);
+             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
          }
      }
 

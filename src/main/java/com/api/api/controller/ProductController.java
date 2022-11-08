@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 @RestController
 @CrossOrigin("*")
@@ -18,6 +19,8 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    private Logger logger;
 
     @PostMapping("/upload-csv-file")
     public ResponseEntity<String> uploadCSVFile(@RequestParam("file") MultipartFile file) {
@@ -31,8 +34,8 @@ public class ProductController {
                 this.productService.save(file);
                 return new ResponseEntity<>("file saved",HttpStatus.OK);
             } catch (Exception e) {
-                //throw new RuntimeException(e);
-                return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+                throw new RuntimeException(e);
+
             }
         }
 
@@ -50,17 +53,19 @@ public class ProductController {
      @PutMapping(value = "/product/{product_id}",params = "product_name")
     public ResponseEntity<String> update(@PathVariable Integer product_id,@RequestParam String product_name){
 
-        return productService.update(product_id,product_name);
+        return ResponseEntity.ok(productService.update(product_id,product_name));
      }
 
      @DeleteMapping(value = "/product/{product_id}")
     public ResponseEntity<String> delete(@PathVariable Integer product_id){
          try {
-             return productService.delete(product_id);
+             String ans= productService.delete(product_id);
+             return ResponseEntity.ok(ans);
          } catch (Exception e) {
-             //throw new RuntimeException(e);
-             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+             throw new RuntimeException(e);
+
          }
+
      }
 
 

@@ -1,5 +1,6 @@
 package com.api.api.service;
 
+import com.api.api.Exception.ListEmptyException;
 import com.api.api.ServiceInterface.ProductServiceInterface;
 import com.api.api.entity.Product;
 import com.api.api.repositories.ProductRepo;
@@ -18,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,50 +58,54 @@ public class ProductService implements ProductServiceInterface {
             Pageable p = PageRequest.of(pageNumber, pageSize);
             Page<Product> pageProduct = this.productRepo.findAll(p);
             List<Product> allProduct = pageProduct.getContent();
+            if(pageProduct==null || pageProduct.getSize()==0){
+                throw new ListEmptyException("no data found");
+            }
             return allProduct;
         }catch (Exception e){
-            e.printStackTrace();
+            throw new RuntimeException();
+
         }
-        return null;
+
     }
 
     @Override
-    public ResponseEntity<String> update(Integer product_id, String product_name) {
+    public String update(Integer product_id, String product_name) {
         try {
-            Optional<Product> product = this.productRepo.findById(product_id);
-            if (product.isEmpty()) {
-                return new ResponseEntity<>("product not found by this id", HttpStatus.BAD_REQUEST);
+            List<Product> product = new ArrayList<>();
+            productRepo.findAllById(product_id).forEach(product::add);
+            if (product==null || product.size()==0) {
+                return "product not found by this id";
             }
-            List<Product> list = productRepo.findAll();
-            for (Product p : list) {
-                if (p.getProductId().equals(product_id)) {
-                    p.setDisplayName(product_name);
-                    list.add(p);
-                    break;
-                }
+
+            for(Product p:product){
+                p.setDisplayName(product_name);
             }
 
         }catch (Exception e){
             e.printStackTrace();
         }
-        return new ResponseEntity<>("product name updated",HttpStatus.OK);
+        return "product name updated";
     }
 
     @Override
-    public ResponseEntity<String> delete(Integer product_id) throws Exception {
+    public String delete(Integer product_id) throws Exception {
         try {
             List<Product> list = productRepo.findAll();
+            if(list==null || list.size()==0){
+                throw new ListEmptyException("list is empty");
+            }
             for (Product p : list) {
                 if (p.getProductId().equals(product_id)) {
                     productRepo.deleteById(product_id);
-                    return new ResponseEntity<>("product deleted",HttpStatus.OK);
+                    return "product deleted";
                 }
             }
 
         }catch (Exception e){
             e.printStackTrace();
         }
-        return new ResponseEntity<>("product not found",HttpStatus.BAD_REQUEST);
+        return "product not found";
     }
 
     /*public List<Product> getAllProductWithSupplierName(String supplier_name, String product_name) {

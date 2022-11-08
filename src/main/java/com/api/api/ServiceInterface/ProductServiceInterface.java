@@ -14,7 +14,7 @@ public interface ProductServiceInterface   {
 
     public List<Product> getAllProducts(Integer pageNumber, Integer pageSize)throws Exception;
 
-    public ResponseEntity<String> update(Integer product_id, String product_name)throws Exception;
+    public String update(Integer product_id, String product_name)throws Exception;
 
-    public ResponseEntity<String> delete(Integer product_id)throws Exception;
+    public String delete(Integer product_id)throws Exception;
 }
